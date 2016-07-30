@@ -2,6 +2,8 @@
 
 Twitter, Souncloud, Github comenzaron con Ruby, aguante Ruby vieja no me importa nada.
 
+##Primeros pasos
+
 	#EstoEsUnComentario
 
 El método `puts` imprime en consola
@@ -45,3 +47,23 @@ Se puede declarar un valor por defecto
 	end
 
 	puts saludo("Hola ","Mud")
+
+###Operaciones aritméticas
+
+>Un número es un objeto
+	
+	8.class
+	
+Siguiente
+
+	8.next
+
+Anterior
+
+	8.pred
+
+¿Cero?, ¿Par?, ¿Impar?
+
+	8.zero?
+	8.even?
+	8.odd?
