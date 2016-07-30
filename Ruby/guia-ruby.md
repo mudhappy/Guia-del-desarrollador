@@ -11,8 +11,10 @@ El método `puts` imprime en consola
 
 ###Variables
 Declaración
+
 	heroe = "Mud"
 Interpolación:
+
 	puts "Hola #{heroe}, bienvenido."
 
 ###Funciones
@@ -32,6 +34,7 @@ Función LEVEL 2
 
 Función LEVEL 3
 Se puede declarar un valor por defecto
+
 	def saludo(texto,usuario="anonimo")
 		return texto+usuario
 	end
