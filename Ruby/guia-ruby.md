@@ -1,12 +1,39 @@
-# Test Markdown
+# Guia básica de Ruby
 
-Sometimes it's useful to have different levels of headings to structure your documents. Start lines with a `#` to create headings. Multiple `##` in a row denote smaller heading sizes.
+Twitter, Souncloud, Github comenzaron con Ruby, aguante Ruby vieja no me importa nada.
 
-### This is a third-tier heading
 
-You can use one `#` all the way up to `######` six for different heading sizes.
+	#EstoEsUnComentario
 
-If you'd like to quote someone, use the > character before the line:
+El método `puts` imprime en consola
 
-> Coffee. The finest organic suspension ever devised... I beat the Borg with it.
-> - Captain Janeway
+	puts "Hola mundo"
+
+###Variables
+Declaración
+	heroe = "Mud"
+Interpolación:
+	puts "Hola #{heroe}, bienvenido."
+
+###Funciones
+Función LEVEL 1
+	def saludo
+		puts "Hola"
+	end
+
+	saludo
+
+Función LEVEL 2
+	def saludo(texto)
+		return texto
+	end
+
+	puts saludo("Hola")
+
+Función LEVEL 3
+Se puede declarar un valor por defecto
+	def saludo(texto,usuario="anonimo")
+		return texto+usuario
+	end
+
+	puts saludo("Hola ","Mud")
