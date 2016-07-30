@@ -48,7 +48,7 @@ Se puede declarar un valor por defecto
 
 	puts saludo("Hola ","Mud")
 
-###Operaciones aritméticas
+##Números
 
 >Un número es un objeto
 	
@@ -67,3 +67,56 @@ Anterior
 	8.zero?
 	8.even?
 	8.odd?
+
+###Más números
+
+Sintaxis de un número decimal
+
+	9 / 2 = 4 #FAIL
+	9.0/2.0 = 4.5 #WIN
+
+¿Es un número real?
+
+	(9.0).real?
+
+Multiplicar cadena
+
+	"Hola"*10	
+
+####Redondear
+
+Abajo
+
+	(9.0/2.0).floor
+	
+Arriba	
+
+	(9.0/2.0).ceil
+
+####Aumentar decimal
+
+Abajo
+
+	(9.0/2.0).next_float
+	
+Arriba	
+
+	(9.0/2.0).prev_float
+
+##Conversión
+
+Obtener valor de consola (devuelve una cadena)
+
+	nombre = gets
+
+Convertir a entero
+
+	(9.0/2.0).to_i
+
+Convertir a flotante
+
+	(9.0/2.0).to_f
+
+Convertir a cadena
+
+	(9.0/2.0).to_s
