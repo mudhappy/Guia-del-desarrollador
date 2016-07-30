@@ -120,3 +120,67 @@ Convertir a flotante
 Convertir a cadena
 
 	(9.0/2.0).to_s
+
+###Operadores lógicos
+
+Al igual que en otros lenguajes `==`,`!=``>=`,`<=` para números y cadenas.
+
+####Condicional IF
+
+	if a<b
+		#code
+	end
+
+	if a<b
+		#code
+	else
+		#code
+	end
+
+	if a<b
+		#code
+	elsif a>b
+		#code
+	else
+		#code
+	end
+
+Para más condiciones `&&` y `||`
+
+####Condicional CASE
+
+	case edad
+	when 0,1,2
+		#code
+	when 3..6
+		#code
+	else
+		#code
+	end
+
+###Loops
+
+	Mientras que ...
+
+	while x<5
+		x += 1
+	end
+
+	Hasta que ...
+	
+	until x == 5
+		x+=1
+	end
+	
+	Loop
+
+	loop do
+		x += 1
+		break if x == 5
+	end
+
+	For
+
+	for x in(0..4)
+		#code
+	end
