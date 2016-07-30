@@ -184,3 +184,44 @@ Para más condiciones `&&` y `||`
 	for x in(0..4)
 		#code
 	end
+
+###Cadenas
+	
+Las cadenas tambien son objetos		
+
+Letra capital
+
+	"mud".capitalize
+
+Mayúscula, minúscula
+
+	"mud".downcase
+	"mud".swapcase
+
+Insertar texto
+
+	"mud".insert(0,"Hola ")
+
+Revertir
+
+	"mud".reverse
+
+Cambiar texto
+
+	"mud es gnial".gsub("gnial","genial")
+	"mud es gnial".sub("gnial","genial")
+
+Eliminar espacios peligrosos
+
+	"mud es genial  ".strip
+
+Preguntar si tiene un texto o comienza con uno
+
+	"mud es genial".include?("mud")
+	"mud es genial".start_with?("m")
+
+Siguiente letra
+
+	"a".next
+
+Para más métodos `"mud".methods`
