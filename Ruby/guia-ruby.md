@@ -244,3 +244,59 @@ Para más métodos `"mud".methods`
 
 	tiempo.day
 	tiempo.month
+
+###Arreglos
+
+Iniciando arreglos
+
+	arreglo = [1, "dos", 3.0, true]
+
+	otro_arreglo = Array.new
+
+	otro_otro_arreglo = []
+
+Seleccionando elemento
+
+	arreglo.size
+	arreglo[0]
+	arreglo.first
+	arreglo[-1]
+
+Los primeros 5 elementos desde el número cero
+
+	arreglo[0,5]
+	arreglo[0..5]
+
+Seleccionar posición del elemento
+	
+	heroes.index("Mud")
+
+Preguntar si existe un elemento
+
+	heroes.include?("Mud") 
+
+Añadiendo elemento
+
+	heroes = []
+	heroes[0] = "Mud"
+	heroes[12] = "Mud"
+
+	heroes.push("Flash")
+	heroes << "Arrow"
+	heroes[heroes.size] = "Quicksilver"
+
+	#Mueve a los otros a la derecha
+	
+	heroes.insert(3,"Spidey")
+
+	#Lo coloca al principio
+	
+	heroes.unshift("Hulk")
+
+Limpiar de nulos
+
+	heroes.compact
+
+Imprimir en pantalla separado por ","
+	
+	puts heroes.join(",")
