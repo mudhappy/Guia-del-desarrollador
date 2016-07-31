@@ -358,7 +358,7 @@ o también
 Recorrer arreglo (el genial foreach)
 
 	heroes.each do |heroe|
-		puts #{heroe}
+		puts "#{heroe}"
 	end
 
 Recorrer each en reversa
@@ -367,12 +367,107 @@ Recorrer each en reversa
 		#code
 	end
 
-Encontrar
+Find (internamente es un each), regresa primer valor que cumpla condición
 
 	heroes.find{ |heroe| heroe.length > 4}
+	heroes.find{ |heroe| heroe.include?("w") }
 
 Iterar en cadena
 
 	"hola".each_char do |letra|
 		#code
 	end
+
+###Hashes y símbolos
+
+####Hashes
+
+	heroes = 
+	{
+		"mud" => 20,
+		"flash" => 350,
+		"arrow" => 200
+	}
+
+####Símbolos
+
+Optimizan, no son objetos.
+
+	heroes = 
+	{
+		:mud => 20,
+		:flash => 350,
+		:arrow => 200
+	}
+
+Agregando elementos
+
+	heroes[:superman] = 1500
+
+Seleccionando elementos
+
+	menu[:mud]
+
+####Avanzado
+
+Devuelve valores [20,350,200]
+
+	heroes = 
+	{
+		:mud => 20,
+		:flash => 350,
+		:arrow => 200
+	}
+
+	heroes.values
+
+Iterar hashes
+
+	heroes.each{|key,value| puts "#{key} - #{value}" }
+
+Convertir un arreglo en hash
+
+	heroes = ["mud","flash","arrow","superman","wonder woman"]
+	
+	nuevo_hash = heroes.group_by do |heroe|
+		heroe.length
+	end
+
+devuelve:
+
+	{
+		3=>["mud"],
+		5=>["flash","arrow"],
+		8=>["superman"],
+		12=>["wonder woman"]
+	}
+
+###Map
+
+Utiliza each internamente para iterar.
+
+	heroes.map do |heroe|
+		heroe.downcase
+	end
+
+o también:
+
+	(1..5).map{|i| i*20 }
+
+o también
+
+	heroes.map do |key,value|
+		puts key
+	end
+
+###Collect
+
+Transforma elementos de un arreglo
+
+	["a","b","c"].collect do |letra|
+		letter.capitalize
+	end
+
+otra forma
+
+	(1..4).collect{"cat"}
