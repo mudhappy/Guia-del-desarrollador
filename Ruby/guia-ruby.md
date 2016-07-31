@@ -471,3 +471,17 @@ Transforma elementos de un arreglo
 otra forma
 
 	(1..4).collect{"cat"}
+
+###Objetos
+
+El objeto más básico en Ruby
+
+	mud = Object.new
+
+Con funciones propias
+
+	def mud.ataca
+		#code
+	end
+
+	mud.ataca
