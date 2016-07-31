@@ -223,6 +223,10 @@ Cambiar texto
 	"mud es gnial".gsub("gnial","genial")
 	"mud es gnial".sub("gnial","genial")
 
+Eliminar texto 
+
+	"mud es genial".delete(" ")
+
 Eliminar espacios peligrosos
 
 	"mud es genial  ".strip
@@ -247,15 +251,17 @@ Para más métodos `"mud".methods`
 
 ###Arreglos
 
-Iniciando arreglos
+####Iniciando arreglos
 
 	arreglo = [1, "dos", 3.0, true]
+
+	arreglo = [1, "dos", 3.0, true , [1, 2] ]
 
 	otro_arreglo = Array.new
 
 	otro_otro_arreglo = []
 
-Seleccionando elemento
+####Seleccionando elemento
 
 	arreglo.size
 	arreglo[0]
@@ -275,7 +281,7 @@ Preguntar si existe un elemento
 
 	heroes.include?("Mud") 
 
-Añadiendo elemento
+####Añadiendo elemento
 
 	heroes = []
 	heroes[0] = "Mud"
@@ -293,10 +299,45 @@ Añadiendo elemento
 	
 	heroes.unshift("Hulk")
 
-Limpiar de nulos
+####Métodos para arreglos
+
+Limpiador de nulos (no modifica original)
 
 	heroes.compact
 
-Imprimir en pantalla separado por ","
+Limpiador de duplicados (no modifica original)
+
+	heroes.uniq
+
+Reversa del arreglo
+
+	heroes.reverse
+
+Ordenar arreglo
+
+	heroes.sort
+
+Une elementos del arreglo separado por un ","
 	
 	puts heroes.join(",")
+
+####Eliminar elementos
+
+Borrar primero
+
+	heroes.shift
+
+Borrar último
+
+	heroes.pop
+
+Borrar por posición
+
+	heroes.delete_at(1)
+
+###Arreglos avanzados
+
+Un arreglo sin arreglos internos
+
+	heroes.flatten
+
