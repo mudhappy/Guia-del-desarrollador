@@ -154,36 +154,44 @@ Para más condiciones `&&` y `||`
 		#code
 	when 3..6
 		#code
+	when 7..10 then #code
 	else
 		#code
 	end
 
 ###Loops
 
-	Mientras que ...
+Mientras que ...
 
 	while x<5
 		x += 1
 	end
 
-	Hasta que ...
+Hasta que ...
 	
 	until x == 5
 		x+=1
 	end
 	
-	Loop
+Loop
 
 	loop do
 		x += 1
 		break if x == 5
 	end
 
-	For
+For
 
 	for x in(0..4)
 		#code
 	end
+
+Times
+
+	3.times do
+		#code
+	end
+
 
 ###Cadenas
 	
@@ -196,6 +204,10 @@ Letra capital
 Mayúscula, minúscula
 
 	"mud".downcase
+	"mud".upcase
+
+	#Intercala 
+
 	"mud".swapcase
 
 Insertar texto
@@ -225,3 +237,10 @@ Siguiente letra
 	"a".next
 
 Para más métodos `"mud".methods`
+
+###Tiempo
+
+	tiempo = Time.now
+
+	tiempo.day
+	tiempo.month
