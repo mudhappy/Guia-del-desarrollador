@@ -131,11 +131,15 @@ Al igual que en otros lenguajes `==`,`!=``>=`,`<=` para números y cadenas.
 		#code
 	end
 
+o también
+
 	if a<b
 		#code
 	else
 		#code
 	end
+
+o también
 
 	if a<b
 		#code
@@ -335,9 +339,40 @@ Borrar por posición
 
 	heroes.delete_at(1)
 
-###Arreglos avanzados
-
 Un arreglo sin arreglos internos
 
 	heroes.flatten
 
+
+###Bloques
+
+	3.times do |x|
+		puts #{x}
+	end
+
+o también
+
+	3.times{ |x| #code }
+
+
+Recorrer arreglo (el genial foreach)
+
+	heroes.each do |heroe|
+		puts #{heroe}
+	end
+
+Recorrer each en reversa
+
+	heroes.reverse_each do |heroe|
+		#code
+	end
+
+Encontrar
+
+	heroes.find{ |heroe| heroe.length > 4}
+
+Iterar en cadena
+
+	"hola".each_char do |letra|
+		#code
+	end
