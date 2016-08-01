@@ -539,3 +539,111 @@ y en el archivo se captura
 
 
 
+###Clases e instancias
+
+Se define asi
+
+	Class heroe
+		#code
+	end
+
+Se crea asi
+
+	mud = heroe.new
+
+Método constructor
+
+Cuando se crea un objeto, este wey se ejecuta primero.
+
+	...
+	def initialize
+		#code
+	end
+	...
+
+Definiendo atributos y métodos
+
+>GET
+
+	def ataque
+		120
+	end
+
+>SET
+	
+	def ataque(str)
+		@ataque = str
+	end
+
+Atributos de clase
+
+	@@all = []
+
+GET
+
+	def self.all
+		@@all
+	end
+
+SET
+
+	@@all << self
+
+####Macros
+
+Mejor forma de definir atributos
+
+>Solo lectura
+
+	attr_reader: :especial
+
+>Solo escritura
+
+	attr_writer: :mana
+
+>Ambos
+
+	#attr_acceso: :nombre, :level
+
+###Herencia
+
+Hereda métodos de otra clase
+
+>Clase Padre
+
+	Class meta_human
+		def initialize
+			puts "soy un pinche meta humano"
+		end
+	end
+
+>Clase hija
+
+	Class heroe < meta_human
+		attr_accesor: username
+	end
+
+La clase `heroe` hereda todos los métodos y atributos de un `meta humano`
+
+	flash = heroe.new
+	flash.username = "@TheFlash"
+
+###Módulos
+
+Paquetes de métodos para re usar.
+
+	module MiModulo
+		def saludo
+			#code
+		end
+	end
+
+Para incluir un módulo
+
+	class Test
+		include MiModulo
+		include Enumerator
+		...
+		
+	end
+
