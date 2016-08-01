@@ -650,7 +650,7 @@ Para incluir un módulo
 
 ##Gemas
 
-Cómo instalar gemas en Windows
+####Cómo instalar gemas en Windows
 
 1. Descargar el DevKit [página oficial](http://rubyinstaller.org/downloads/)
 
@@ -664,12 +664,35 @@ Cómo instalar gemas en Windows
 
 		ruby dk.rb install
 
-4. Instalar la gema
+4. Instalar la gema :')'
 
 		gem install twitter
 
+####Archivo Gemfile
+
+Aqui se especifica las gemas del proyecto
+
+	gem "twitter"
+
+Archivo GemFile.lock
+Gemas que necesitan mis gemas.
+
+>Necesaria la gema bundler
+	
+	gem install bundler
+
+>Creando .lock
+
+	bundler install
+	
 
 
+####Usando una gema
 
+Cada gema tiene su propia documentación
+
+Para usarla:
+
+	require "twitter" 
 
 	
