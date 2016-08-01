@@ -20,6 +20,9 @@ Interpolación:
 
 	puts "Hola #{heroe}, bienvenido."
 
+	puts "La suma de 1 + 2 es #{1+2}"
+
+
 ###Funciones
 
 ####Función LEVEL 1
@@ -149,6 +152,16 @@ o también
 		#code
 	end
 
+o también (MODO LIGHT)
+
+	puts "soy genial" if #code
+
+#####Condicional UNLESS (A menos que)
+
+	unless a == b 
+		#code
+	end 
+
 Para más condiciones `&&` y `||`
 
 ####Condicional CASE
@@ -264,6 +277,10 @@ Para más métodos `"mud".methods`
 	otro_arreglo = Array.new
 
 	otro_otro_arreglo = []
+
+>Tip: No te gustan las comillas?
+
+	%w[1 "dos" 3.0 true]
 
 ####Seleccionando elemento
 
@@ -551,6 +568,9 @@ Se crea asi
 
 	mud = heroe.new
 
+	>Inspeccionar un objeto
+	mud.inspect
+
 Método constructor
 
 Cuando se crea un objeto, este wey se ejecuta primero.
@@ -560,6 +580,15 @@ Cuando se crea un objeto, este wey se ejecuta primero.
 		#code
 	end
 	...
+
+o también
+
+	...
+	def initialize(name,level)
+		@name,@level = name,level
+	end
+	...	
+	me = Heroe.new("Mud",9000)
 
 Definiendo atributos y métodos
 
@@ -575,7 +604,7 @@ Definiendo atributos y métodos
 		@ataque = str
 	end
 
-Atributos de clase
+Atributos/Métodos de clase
 
 	@@all = []
 
@@ -603,7 +632,7 @@ Mejor forma de definir atributos
 
 >Ambos
 
-	#attr_acceso: :nombre, :level
+	#attr_accesor: :nombre, :level
 
 ###Herencia
 
@@ -623,10 +652,20 @@ Hereda métodos de otra clase
 		attr_accesor: username
 	end
 
+>Peligro de sobreescritura?, llamamos al método de la superclase con `super` 
+	
+	def self.description
+		#super()
+		super
+		#code
+	end
+
+
 La clase `heroe` hereda todos los métodos y atributos de un `meta humano`
 
 	flash = heroe.new
 	flash.username = "@TheFlash"
+
 
 ###Módulos
 
@@ -668,7 +707,7 @@ Para incluir un módulo
 
 		gem install twitter
 
-####Archivo Gemfile
+####Archivo Gemfile(necesario para ciertas gemas con dependencia)
 
 Aqui se especifica las gemas del proyecto
 
@@ -685,7 +724,6 @@ Gemas que necesitan mis gemas.
 
 	bundler install
 	
-
 
 ####Usando una gema
 
