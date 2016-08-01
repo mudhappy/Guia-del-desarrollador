@@ -485,3 +485,57 @@ Con funciones propias
 	end
 
 	mud.ataca
+
+###Archivos
+
+Para solo lectura `r`
+
+Para solo escritura `w`	
+
+Para lectura y escritura `w+`	
+
+Para lectura `a`	
+
+Abriendo archivo
+
+	f = File.open("tweets.txt","r")
+
+Lectura del archivo
+
+	f.each do |linea|
+		puts "#{linea}"
+	end
+
+o también (abertura y lectura)
+
+	File.readlines("tweets.txt").each do |linea|
+		puts "#{linea}"
+	end
+
+Obteniendo Numlinea de cada linea del archivo `each_with_index`
+
+	File.readlines("tweets.txt").each_with_index do |value,key|
+		puts "Key: #{key} -> #{value}"
+	end
+
+Escribiendo en un archivo
+
+	heroes = ["Mud","Flash","Batman"]
+
+	File.open("text.txt","w+") do  |archivo|
+		heroes.each{|heroe| puts archivo.puts(heroe) }
+	end
+
+###Argumentos
+
+Estos argumentos se pasan en consola
+
+	ruby rubyfile.rb tweets.txt
+
+y en el archivo se captura 
+
+	ARGV[0]
+	ARGV[1]
+
+
+
