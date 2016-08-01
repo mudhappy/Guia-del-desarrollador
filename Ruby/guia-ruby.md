@@ -644,6 +644,32 @@ Para incluir un módulo
 		include MiModulo
 		include Enumerator
 		...
-		
+
 	end
 
+
+##Gemas
+
+Cómo instalar gemas en Windows
+
+1. Descargar el DevKit [página oficial](http://rubyinstaller.org/downloads/)
+
+2. Extrar el archivo en una ruta sin espacios
+
+3. Seguir los pasos de su [documentación](https://github.com/oneclick/rubyinstaller/wiki/Development-Kit)
+
+	cd C:/DevKit
+
+	ruby dk.rb init
+
+	ruby dk.rb install
+
+4. Instalar la gema
+
+	gem install twitter
+
+
+
+
+
+	
