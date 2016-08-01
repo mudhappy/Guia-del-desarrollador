@@ -658,15 +658,15 @@ Cómo instalar gemas en Windows
 
 3. Seguir los pasos de su [documentación](https://github.com/oneclick/rubyinstaller/wiki/Development-Kit)
 
-	cd C:/DevKit
+		cd C:/DevKit
 
-	ruby dk.rb init
+		ruby dk.rb init
 
-	ruby dk.rb install
+		ruby dk.rb install
 
 4. Instalar la gema
 
-	gem install twitter
+		gem install twitter
 
 
 
