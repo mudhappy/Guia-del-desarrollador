@@ -722,7 +722,7 @@ Gemas que necesitan mis gemas.
 
 >Creando .lock
 
-	bundler install
+	bundle install
 	
 
 ####Usando una gema
