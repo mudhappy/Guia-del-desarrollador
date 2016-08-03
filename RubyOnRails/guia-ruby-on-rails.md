@@ -33,8 +33,8 @@ iniciando servidor en `localhost:300`
 
 Crea el controlador `welcome` con la función index
 
-	>También genera una vista
-	>También genera una ruta
+>También genera una vista
+>También genera una ruta
 
 	rails generate controller welcome index
 
@@ -76,6 +76,15 @@ Iterando articulos en la vista
 		<h1><%= articulo.title %></h1>
 		<div><%= articulo.body %></div>
 	<% end %>
+
+####Formularios (vista)
+
+Obtiene `articulo` del controlador y rails tiene una forma especial de tratar formularios
+
+	<% form_for(@articulo) do |f| %>
+		<%= f.text_field :title, placeholder = "Título" %>
+		<%= f.text_area :body, placeholder = "Escribe el artículo" %>
+	<%end%>
 
 
 ###Rutas
