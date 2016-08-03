@@ -51,10 +51,56 @@ A cada campo del la tabla se le coloca su tipo
 ###Controladores
 
 Para que se pueda acceder a los datos desde la vista se declaran variable de clase
+	
+Show all
 
-	@articulos = Article.all
+	def show
+		@articulos = Article.all
+	end
 
-	@articulo = Article.find(params[:id])
+New (Show 1)
+
+	def new
+		@articulo = Article.find(params[:id])
+	end
+
+Create
+
+	def create
+		@articulo = Article.new(title: params[:article][:title], body: params[:article][:body])
+
+		@articulo.save
+
+		redirect_to @articulo
+	end
+
+
+>Validando save
+
+	if @articulo.save
+		redirect_to @articulo
+	else
+		#Renderiza 
+		render :new
+	end
+
+	#Con esto sabemos si es valido (opcional)
+
+	@articulo.invalid?
+
+
+###Modelo
+
+En el modelo se hacen las validaciones
+
+	validates :title, presence: true, uniqueness: true
+	validates :body, presence: true	, length: {minimum: 20}
+
+>Más validaciones
+	
+	#Expresiones regulares
+	validates :username, format: {with: /regex/}
+
 
 ###Vista
 
@@ -65,9 +111,9 @@ Para que se pueda acceder a los datos desde la vista se declaran variable de cla
 
 Mostrando solo un articulo en la vista
 
-	<h1><%= @article.title %></h1>
+	<h1><%= @articulo.title %></h1>
 	<div>
-		<p><%= @article.body %></p>
+		<p><%= @articulo.body %></p>
 	</div>
 
 Iterando articulos en la vista
@@ -79,13 +125,33 @@ Iterando articulos en la vista
 
 ####Formularios (vista)
 
-Obtiene `articulo` del controlador y rails tiene una forma especial de tratar formularios
+Se le pasa como parametro un objeto del modelo, y cuando se procesa rails deduce:
 
-	<% form_for(@articulo) do |f| %>
-		<%= f.text_field :title, placeholder = "Título" %>
-		<%= f.text_area :body, placeholder = "Escribe el artículo" %>
+>Si no existe, crea el registro (create)
+>Si existe, lo actualiza
+
+	<%= form_for(@articulo) do |f| %>
+		<%= f.text_field :title, placeholder: "Título" %>
+		<%= f.text_area :body, placeholder: "Escribe el artículo" %>
+		<%= f.submit "Guardar" %>
 	<%end%>
 
+>Este formulario llama a una ruta post (create)
+
+>y más tipos de inputs:
+
+	text_hidden
+	password_field
+	text_area
+	text_field
+	...
+
+
+Para capturar un error de formularios
+
+	<% @articulo.errors.full_messages.each do |mensaje| %>
+		<div><%= mensaje %></div>
+	<% end %>
 
 ###Rutas
 
