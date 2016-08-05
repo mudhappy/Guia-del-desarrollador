@@ -51,6 +51,8 @@ A cada campo del la tabla se le coloca su tipo
 ###Controladores
 
 Para que se pueda acceder a los datos desde la vista se declaran variable de clase
+
+####Active record desde el controlador 
 	
 Show all
 
@@ -58,10 +60,30 @@ Show all
 		@articulos = Article.all
 	end
 
-New (Show 1)
+####Show
 
 	def new
 		@articulo = Article.find(params[:id])
+	end
+
+>o también (Anti SQl inyection)
+
+	Article.where("id = ? OR title = ?",params[:id],params[:title] )
+
+>Método inseguro(Pro sql inyection D:)
+
+	def show
+		Article.where("id = #{params[:id]} ")
+	end
+
+>Where not
+
+	Article.where.not("id = #{params[:id]} ")
+
+New
+
+	def new
+		@articulo = Article.new
 	end
 
 Create
@@ -73,6 +95,25 @@ Create
 
 		redirect_to @articulo
 	end
+
+>o también una versión reducida
+
+	@articulo = Article.create(title: params[:article][:title], body: params[:article][:body])
+	
+	redirect_to @articulo
+
+Para evitar campos sensibles se crea una función privada
+
+	private
+	
+	def article_params
+		params.require(:article).permit(:title, :body)
+	end
+
+>Entonces en el create()
+	
+	@articulo = new (article_params)
+
 
 
 >Validando save
@@ -88,6 +129,51 @@ Create
 
 	@articulo.invalid?
 
+####Destroy
+
+	def destroy
+		@articulo = Article.find(params[:id])
+		@articulo.destroy
+		redirect_to article_path
+	end
+
+####Edit - envia datos a la vista (recogido por el form)
+
+	def edit
+		@articulo = Article.find(params[:id])
+	end
+
+####Update (se le pasa un hash de datos)
+
+	def update
+		@articulo = Article.find(params[:id])
+		if @articulo.update(article_params)
+			redirect_to @articulo
+		else
+			render :edit
+		end
+	end
+
+####Más Active Record
+
+Sql con objetos
+
+Cantidad de registros de una tabla
+
+	Article.all.size
+	Article.all.count
+
+Buscar un registro por id
+
+	Article.find(4)
+
+Buscar un registro por otros campos (LIMIT 1)
+
+	Article.find_by(title: "Hola")
+
+Buscar registro con LIKE
+
+	 Article.where("title LIKE ?", "%arti%")
 
 ###Modelo
 
@@ -102,12 +188,13 @@ En el modelo se hacen las validaciones
 	validates :username, format: {with: /regex/}
 
 
-###Vista
+###Vistas
 
 >Views / articles (se debe crear la carpeta de la vista)
 > index.html.erb
 > new.html.erb
 > show.html.erb
+>...
 
 Mostrando solo un articulo en la vista
 
@@ -131,7 +218,7 @@ Se le pasa como parametro un objeto del modelo, y cuando se procesa rails deduce
 >Si existe, lo actualiza
 
 	<%= form_for(@articulo) do |f| %>
-		<%= f.text_field :title, placeholder: "Título" %>
+		<%= f.text_field :title, placeholder: "Título", class: "form-control" %>
 		<%= f.text_area :body, placeholder: "Escribe el artículo" %>
 		<%= f.submit "Guardar" %>
 	<%end%>
@@ -144,6 +231,7 @@ Se le pasa como parametro un objeto del modelo, y cuando se procesa rails deduce
 	password_field
 	text_area
 	text_field
+	email_field
 	...
 
 
@@ -152,6 +240,30 @@ Para capturar un error de formularios
 	<% @articulo.errors.full_messages.each do |mensaje| %>
 		<div><%= mensaje %></div>
 	<% end %>
+
+Método eliminar vista>controlador
+
+	<%= link_to "Eliminar", articulo, method: :delete %>
+
+Método eliminar vista>controlador
+
+	<%= link_to "Editar", edit_article_path(@articulo) %>
+
+####Vistas parciales
+
+Se nombra a una vista parcial con el guión bajo `_form.html.erb`
+
+Como llamar a un parcial
+
+	<%= render "form" %>
+
+Vistas parciales con variables (locales, no globales)
+
+	<%= render "form", name: "Crear" %>
+
+>Se acceden a esas variables locales desde la vista con
+
+	<%= name %>
 
 ###Rutas
 
@@ -163,7 +275,7 @@ El principal:
 	root 'welcome#index'
 
 
-####Rutas -Avanzados
+####Rutas Avanzadas
 
 Verbos de las rutas `get` y `post`
 
@@ -185,7 +297,7 @@ Significa:
 
 	get "/articles" index
 	post "/articles" create
-	delete "/articles" delete
+	delete "/articles/:id" destroy
 	get "/articles/:id" show
 	get "/articles/new" new
 	get "/articles/:id/edit" edit
@@ -233,3 +345,161 @@ Insertar un articulo
 ###Layout
 
 Si quiero agregar un link o código que influencie en todas las demás, este es el sitio 
+
+##Autentificación
+
+Instalar la gema `devise` (una de tantas de autentificación)
+
+1. Agregar en el archivo GemFile
+
+	gem "devise"
+
+2. Actualizar dependencias con 
+	
+	bundle install
+
+Generando controlador de la gema `devise`
+
+	rails generate devise:install
+
+>La gema `devise` trae componentes para validacion por correo, errores de login, entre otros.
+
+Generar el modelo (migración) con el que `devise` va a trabajar
+
+	rails generate devise User
+
+>El modelo es customizable
+
+	t.string :name
+	t.string :permission_level 
+
+Generando las vistas
+
+	rails g devise:view
+
+>Esto crea una carpeta `devise` en la vista
+
+Algunos métodos, siendo `user` el nombre del modelo
+
+	if user_signed_in?
+		link_to "Logout", destroy_user_session_path, , method: :delete
+	end
+
+Login
+	
+	<%= link_to "Login", new_user_session_path %>
+
+Sign Up
+	
+	<%= link_to "Sign Up", new_user_registration_path %>
+	
+
+User actual (mail)
+
+	<%= current_user.email %>
+
+
+####Más de Identificación
+
+Unificando users y articles
+
+Generar la migración: La referencia es `user`, por lo tanto se agregará un `user_id` en la tabla articles
+
+	rails generate migration add_user_id_to_articles user:references
+
+Ejecutar la migración
+
+	rake db:migrate
+
+Cambios en el Modelo User: Un usuario tiene muchas ...
+
+	has_many :articles
+
+Cambios en el Modelo Artículo: Un Artículo pertenece a un sólo ...
+
+	belongs_to :user
+
+Y ahora tenemos un nuevo método
+
+	Article.last.user
+
+No olvidar cambiar en el controlador (en el `create`)
+
+>.articles es un método que tiene "current_user" por la llave foránea creada "has_many"
+
+	@articulo = current_user.articles.new(...)
+
+###Callback
+
+Para preveer acciones que necesiten:
+
+####...Haber iniciado sesión (Login)
+
+Una de las ventajas de `devise`, redirige al lugar anterior luego de hacer login 
+
+	before_action :authenticate_user!, only: [:create,:new] 
+
+o también hacerlo manualmente
+
+>Antes de una acción `before` que necesita login
+
+	before_action :validate_user, except: [:show,:index]
+
+>Función "validate_user"
+
+	def validate_user
+		redirect_to new_user_session_path, notice: "Necesitas iniciar sesión"
+	end
+
+####...la variable @articulo
+
+	before_action :set_article, except: [:index,:new]
+	
+>Función set_article
+
+	def set_article
+		@articulo = Article.find(params[:id])
+	end
+
+####...call back en el modelo
+
+Seteando article antes de crearse
+
+	before_create :set_visits_count
+
+>Función set_visits_count
+
+	def set_visits_count
+		self.visits_count = 0
+	end
+
+Corrección de un campo nulo en la BD
+
+>En el modelo, guardar si es nulo
+
+	self.save if self.visits_count.nil?
+	*update ...
+
+>Si es nulo setear a cero
+
+	self.visits_count ||= 0
+
+###Scaffold: CRUD veloz
+
+Generamos el CRUD
+
+>Rake necesario
+>Se crea un css *quitar
+
+	rails generate scaffold Comment user:references article:references body:text
+
+###Recursos anidados
+
+Cuando no tiene sentido por si solo, pero si con otro.
+Comentarios de un artículo.
+
+>Archivo Rutas
+
+	resources :articles do
+    	resources :comments
+  	end
