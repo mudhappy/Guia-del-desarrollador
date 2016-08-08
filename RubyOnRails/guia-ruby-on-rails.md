@@ -498,8 +498,45 @@ Generamos el CRUD
 Cuando no tiene sentido por si solo, pero si con otro.
 Comentarios de un artículo.
 
->Archivo Rutas
+>Indicando a la ruta que `comments` es subrecurso de `articles`, la forma de las rutas cambiará
 
 	resources :articles do
     	resources :comments
   	end
+
+>Indicando al modelo la relación (usuario-articulo>comentarios)
+
+	has_many :comments
+
+Rendereando el CommentForm en un artículo
+
+	<h3>Comentarios</h3>
+	<%= render "comments/form" %>
+
+Se combina el recurso padre con el recurso hijo en la vista del hijo:
+
+	<%= form_for([@articulo,@comment]) do |f| %>
+
+>Y en el controlador del articulo debemos iniciar el objeto (Show)
+
+	@comment = Comment.new
+	
+>Y el usuario del controlador del comentario es el usuario actual (Create)
+
+	@comment = current_user.comments.new(comment_params)
+
+>Y el aticulo es el articulo actual
+
+	@comment.article = @articulo;
+
+	#no olvidar  before_action :set_article
+
+>La ruta de dirección también corregir
+
+	redirect_to @articulo
+
+>Llamando a los comentarios a la vista
+
+	<%@articulo.comments.each do |comentario|%>
+		<li><b><%=comentario.user.email%> : </b><%=comentario.body%></li>
+	<%end%> 
