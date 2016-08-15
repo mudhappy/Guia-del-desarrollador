@@ -232,6 +232,8 @@ Se le pasa como parametro un objeto del modelo, y cuando se procesa rails deduce
 	text_area
 	text_field
 	email_field
+	<%= check_box_tag "categories[]", category.id %> <%=category.name%>
+
 	...
 
 
@@ -540,3 +542,351 @@ Se combina el recurso padre con el recurso hijo en la vista del hijo:
 	<%@articulo.comments.each do |comentario|%>
 		<li><b><%=comentario.user.email%> : </b><%=comentario.body%></li>
 	<%end%> 
+
+####Ajax form
+
+Para convertir el formulario en petición Ajax
+
+	<%= form_for([@articulo,@comment], remote: true) do |f| %>
+	
+	>y enviar mediante Json
+
+	<%= form_for([@article, @comment], remote: true, html:{id: "comments-form", :"data-type" => "json"}) do |f| %>
+
+Código .coffe
+
+	$(document).on "ajax:success", "form#comments-form", (ev,data)->
+		console.log "Oh si"
+		console.log data
+		$(this).find("textarea").val("");
+		$("#comments-box").append("<li>#{data.body}</li>");
+
+>Cuidado con las rutas
+
+	before_action :set_comment, only: [:update, :destroy, :show]
+
+>Cuidado con el _comment.json.jbuilder >:c
+
+####JBuilder
+
+En el jbuilder extraemos el datos del user usando el comentario como llave foranea
+
+	json.user do
+		json.email @comment.user.email
+	end
+
+Y ya podemos mostrarlo por el success ajax .coffe
+
+	data.user.email
+
+###ImageMagick
+
+Descargar desde el [enlace oficial](http://www.imagemagick.org/script/binary-releases.php#windows), comprobando ...
+
+	convert -version
+
+Añadiendo gema al Gemfile (bundle install)
+
+	gem 'paperclip'
+
+Generar migración
+
+	rails g migration add_cover_to_articles
+
+Añadir relación a la migración(rake db:migrate)
+	
+	add_attachment :articles, :cover
+
+En el modelo del artículo(mismo de aqui arriba)
+
+	has_attached_file :cover
+
+>Añadiendo tamaño de imágenes
+
+	has_attached_file :cover, styles: {medium: "1280x720", thumb: "800x600" , mini: "400x200"}
+	#has_attached_file :cover, style: {medium: "1280x720", thumb: "800x600"}
+
+> Añadiendo validación de solo imágenes
+
+	validates_attachment_content_type :cover, content_type: /\Aimage\/.*Z/ 
+
+Añadiendo campo a la vista (_form)
+
+	<%= f.file_field :cover%>
+
+>No olvidar agregarlo a los parámetros del controlador
+
+	def article_params
+		params.require(:article).permit(:title, :body, :cover)
+	end
+
+En la vista del aticulo (Show)
+
+	<%= image_tag @article.cover.url() %>
+
+>(Ver instalación de File)[https://github.com/thoughtbot/paperclip#file] necesario para Windows
+
+###Categorias
+
+	rails g scaffold Category name color
+
+Añadiendo validacion al modelo
+
+	validates :name, presence: true
+
+Cambiando a color la vista 
+
+	<%= f.color_field :color %>
+
+Application controller es el lugar perfecto para poner comportamientos ue se comparten entre todos los controladores
+
+	before_action :set_categories
+	private
+
+	def set_categories
+	  	@categories = Category.all
+	end
+
+En la vista
+
+	<% @categories.each do |category| %>
+		<li><%= category.name %></li>
+	<%end%>
+
+####Creando Tabla muchos a muchos
+
+Creando modelo (rake db:migrate)
+
+	rails g model HasCategory article:references category:references
+
+Para convertir las categorias en un arreglo para pasarlo por el form
+
+	<%=check_box_tag "categories[]", category.id%> <%=category.name%>
+
+Y especificarlo en el controlador
+
+	@article.categories = params[:categories]
+	
+
+>No olvidar agregarlo al controlador (_params)
+	
+	params.require(:article).permit(:title, :body, :cover, :categories)
+
+En el modelo article seteamos las categorias
+
+	def categories=(value)
+		@categories = value
+	end 
+
+Para tener un callback y guardar
+
+	after_create :save_categories
+
+	def save_categories
+		@categories.each do |category_id|
+			HasCategory.create(category_id: category_id, article_id: self.id)
+		end
+	end
+
+Relacionando en el modelo Category (Muchos a Muchos) 
+
+	has_many :has_categories
+	has_many :articles, through: :has_categories
+
+Ahora si se puede mostrar los articulos en la vista de las categorias
+
+	<%@category.articles.each do |article|%>
+		<li><%= link_to article.title, article %></li>
+	<%end%>
+
+>Tambien se relaciona en el modelo Article
+
+	has_many :has_categories
+	has_many :categories, through: :has_categories
+	
+###Cambiando Tablas por Migrations
+
+La columna permission_levels deberia ser Integer, no String
+
+Entonces generamos la migración y: 
+
+	def change
+		remove_column :users, :permission_level, :string
+		add_column :users, :permission_level, :integer, default: 1
+	end
+
+###Concern
+
+Esos ajustes,métodos que queremos presente en todo el grupo de modelos o controladores
+
+Creamos un .rb en la carpeta concern correspondiente
+
+	permisions_concern.rb
+
+Creamos los métodos
+
+	module PermisionsConcern
+		extend ActiveSupport::Concern
+		def is_normal_user?
+			self.permission_level >= 1
+		end	
+
+		def is_editor?
+			self.permission_level >= 2
+		end	
+
+		def is_admin?
+			self.permission_level >= 3
+		end	
+	end
+
+Y por ejemplo incluimos el método en el modelo User
+
+	include PermisionsConcern
+
+Usando el concern en otro lugar (ApplicationController)
+
+	def authenticate_editor!
+		redirect_to root_path unless user_signed_in? && current_user.is_editor?
+	end
+
+	def authenticate_admin!
+		redirect_to root_path unless user_signed_in? && current_user.is_admin?
+	end
+
+Validando en el ArticleController
+
+	before_action :authenticate_editor!, only: [:new,:create,:update]
+	before_action :authenticate_admin!, only: [:destroy]
+
+>Actualizando campo rails console
+
+	User.last.update_attributes(permission_level: 3)
+
+###AASM
+
+Crea migracion de agregar columna estado a los articulos
+
+	rails g migration add_column_state_to_articles state
+
+>Migración
+
+	add_column :articles, :state, :string, default: "in_draft"
+
+Agregamos la gema al Gemfile (bundle install)
+
+	gem 'aasm'
+
+Para que nuestro modelo Article pueda hacer uso de la maquina de estados
+
+	include AASM
+
+La columna que afectaremos será
+
+	aasm column: "state" do
+			
+	end
+
+Creamos las transiciones de los eventos
+
+	aasm column: "state" do
+		state :in_draft, initial: true
+		state :published
+
+		event :publish do
+			transitions from: :in_draft, to: :published
+		end
+
+		event :unpublish do
+			transitions form: :published, to: :in_draft
+		end
+	end
+
+Cambiando estado desde la consola
+
+	Article.last.publish!
+
+####Scopes
+
+	scope :publicados, ->{where(state: "published")}
+	#scope :publicados, ->{Article.where(state: "published")}
+
+o también
+
+	def self.publicados
+		Article.where(state: "published")
+	end
+
+>Más scopes
+
+	scope :ultimos, ->{order("created_at DESC").limit(10)}
+	
+Usando scopes (controlador Article)
+
+	def index
+		@articles = Article.publicados.ultimos
+	end
+
+###Dashboard
+
+Agregando ruta `welcome#dashboard`
+
+  get "/dashboard", to: "welcome#dashboard"
+
+Agregando método al controlador Welcome
+	
+	def dashboard
+  	
+  	end
+
+Agregando vista `dashboard.html.erb` a la carpeta welcome
+
+En el controlador designamos que solo el admin puede usar ese método
+
+	before_action :authenticate_admin!, only: [:dashboard]
+
+En la ruta, colocamos la acción con `put` 
+
+  put "/articles/:id/publish", to: "articles#publish"
+
+Necesitamos crear el método `publish` en el controlador Article
+
+	def publish
+	end
+
+>Y que solo el admin pueda acceder a ese método
+
+	before_action :authenticate_admin!, only: [:destroy,:publish]
+	
+Método publish
+
+	@article.publish!
+	redirect_to @article
+
+Enlace para Publicar artículo en la vista (each)
+
+	<%= link_to "Publicar", "/articles/#{article.id}/publish", method: :put %>
+
+Solo se mostrarán en los artículos que pueden ser publicados
+
+	<%if article.may_publish?%>
+		#code
+	<%end%>
+
+###Paginación
+
+Instalamos la gema
+
+	gem 'will_paginate'
+
+En el controlador del Article
+
+	@articles = Article.publicados
+
+A esto:
+
+	@articles = Article.paginate(page: params[:page], per_page:5).publicados
+
+Agregando paginación a la vista
+
+	<%= will_paginate @articles %>

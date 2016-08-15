@@ -41,6 +41,14 @@ Interpolación:
 
 	puts saludo("Hola")
 
+####Función LEVEL 2.1 , *textos es un arreglo
+
+	def saludo(texto,*textos)
+		return texto
+	end
+
+	puts saludo("Hola","como","estas")
+
 ####Función LEVEL 3
 
 Se puede declarar un valor por defecto
