@@ -346,6 +346,10 @@ Ordenar arreglo
 
 	heroes.sort
 
+Está lleno
+
+	heroes.any?
+
 Une elementos del arreglo separado por un ","
 	
 	puts heroes.join(",")

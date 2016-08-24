@@ -4,14 +4,6 @@ Rails es un framework de desarrollo de aplicaciones web optimizado para la felic
 
 ##Configuración
 
-###Instalación
-
-En Windows descargar [RailsInstaller](http://railsinstaller.org/en) , que incluye (02/08/16) Rails 4.2,Bundler,Git,Sqlite,TinyTDS,SQL Server Support,DevKit.
-
-Comprobando versión de rails:
-
-	rails -v
-
 ###Creando nuevo proyecto
 
 	rails new mudTest
